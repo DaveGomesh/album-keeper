@@ -13,7 +13,7 @@ public class MusicaRequest {
     @NotNull @NotBlank
     private String nome;
     
-    @NotNull @NotBlank
+    @NotNull
     private Integer duracao;
 
     private Set<Integer> idAutores;

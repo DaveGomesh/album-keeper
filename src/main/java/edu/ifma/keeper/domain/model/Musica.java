@@ -45,7 +45,7 @@ public class Musica {
     @Column(name = "nome")
     private String nome;
     
-    @NotNull @NotBlank
+    @NotNull
     @Column(name = "duracao")
     private Integer duracao;
 }
