@@ -45,7 +45,7 @@ public class MusicaController {
             musicaMapper.toResponse(musica)
         );
 
-        return new ResponseEntity<>(musicaResponse, HttpStatus.OK);
+        return new ResponseEntity<>(musicaResponse, HttpStatus.CREATED);
     }
 
     @GetMapping("{id-musica}")
