@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,29 +54,7 @@ public class MusicaService {
     public List<Musica> buscar(){
         return musicaRepository.findAll();
     }
-
-    @Transactional
-    public Musica buscar(Integer idMusica, Boolean eagerMode){
-
-        final Musica musica = this.buscar(idMusica);
-        if(eagerMode){
-            inicializarCamposLazy(musica);
-        }
-
-        return musica;
-    }
-
-    @Transactional
-    public List<Musica> buscar(Boolean eagerMode) {
-
-        final List<Musica> listaMusica = musicaRepository.findAll();
-        if(eagerMode){
-            listaMusica.forEach(this::inicializarCamposLazy);
-        }
-
-        return listaMusica;
-    }
-
+    
     public Musica atualizar(Integer idMusica, Musica musica, Set<Integer> idAutores, Set<Integer> idCantores){
 
         Musica musicaAtual = (
@@ -97,10 +74,5 @@ public class MusicaService {
         
         Musica musica = this.buscar(idMusica);
         musicaRepository.delete(musica);
-    }
-
-    private void inicializarCamposLazy(Musica musica){
-        Hibernate.initialize(musica.getAutores());
-        Hibernate.initialize(musica.getCantores());
     }
 }

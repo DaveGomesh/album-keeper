@@ -52,7 +52,7 @@ public class MusicaController {
     public ResponseEntity<MusicaResponse> buscar(
         @PathVariable("id-musica") Integer idMusica){
         
-        Musica musica = musicaService.buscar(idMusica, true);
+        Musica musica = musicaService.buscar(idMusica);
         final MusicaResponse musicaResponse = (
             musicaMapper.toResponse(musica)
         );
@@ -63,7 +63,7 @@ public class MusicaController {
     @GetMapping
     public ResponseEntity<List<MusicaResponse>> buscar(){
         
-        List<Musica> listaMusica = musicaService.buscar(true);
+        List<Musica> listaMusica = musicaService.buscar();
         final List<MusicaResponse> listaMusicaResponse = (
             musicaMapper.toResponseList(listaMusica)
         );
