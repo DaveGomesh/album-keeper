@@ -17,6 +17,10 @@ public class MusicaMapper {
     private final ModelMapper modelMapper;
 
     public Musica toEntity(MusicaRequest musicaRequest) {
+
+        // Ignora o mapeamento ambiguo para idMusica
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        
         return modelMapper.map(musicaRequest, Musica.class);
     }
 
