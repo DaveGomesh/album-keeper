@@ -74,7 +74,7 @@ public class MusicaController {
     @PutMapping("{id-musica}")
     public ResponseEntity<MusicaResponse> atualizar(
         @PathVariable("id-musica") Integer idMusica, 
-        @RequestBody MusicaRequest musicaRequest){
+        @RequestBody @Valid MusicaRequest musicaRequest){
 
         Musica musica = musicaMapper.toEntity(musicaRequest);
         Set<Integer> idAutores = musicaRequest.getIdAutores();
