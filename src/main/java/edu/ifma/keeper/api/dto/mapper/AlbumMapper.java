@@ -19,8 +19,9 @@ public class AlbumMapper {
 
     public Album toEntity(AlbumRequest albumRequest) {
         
-        // // Ignora o mapeamento ambiguo para idMusica
-        // modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        // Ignora o mapeamento ambiguo para idMusica
+        modelMapper.getConfiguration().setAmbiguityIgnored(true);
+        
         return modelMapper.map(albumRequest, Album.class);
     }
 
