@@ -83,7 +83,7 @@ public class ArtistaController {
     @PutMapping("{id-artista}")
     public ResponseEntity<ArtistaResponse> atualizar(
         @PathVariable("id-artista") Integer idArtista, 
-        @RequestBody ArtistaRequest artistaRequest){
+        @RequestBody @Valid ArtistaRequest artistaRequest){
 
         Artista artista = artistaMapper.toEntity(artistaRequest);
         artista = artistaService.atualizar(idArtista, artista);
