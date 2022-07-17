@@ -52,6 +52,10 @@ public class MusicaService {
         return musica;
     }
 
+    public List<Musica> buscar(){
+        return musicaRepository.findAll();
+    }
+
     @Transactional
     public Musica buscar(Integer idMusica, Boolean eagerMode){
 
@@ -61,10 +65,6 @@ public class MusicaService {
         }
 
         return musica;
-    }
-
-    public List<Musica> buscar(){
-        return musicaRepository.findAll();
     }
 
     @Transactional
