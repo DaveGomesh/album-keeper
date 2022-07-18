@@ -1,6 +1,7 @@
 package edu.ifma.keeper.api.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ifma.keeper.api.dto.mapper.ArtistaMapper;
@@ -58,9 +60,21 @@ public class ArtistaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtistaResponse>> buscar(){
+    public ResponseEntity<List<ArtistaResponse>> buscar(
+        @RequestParam(value = "nome", required = false) String nome, 
+        @RequestParam(value = "nascionalidade", required = false) String nascionalidade){
         
-        List<Artista> listaArtista = artistaService.buscar();
+        List<Artista> listaArtista = null;
+        
+        if(Objects.isNull(nome) && Objects.isNull(nascionalidade)){
+            listaArtista = artistaService.buscar();
+        } else if(Objects.nonNull(nome) && Objects.nonNull(nascionalidade)){
+            listaArtista = artistaService.buscarPorNomeENascionalidade(nome, nascionalidade);
+        } else if(Objects.nonNull(nome)){
+            listaArtista = artistaService.buscarPorNome(nome);
+        } else {
+            listaArtista = artistaService.buscarPorNascionalidade(nascionalidade);
+        }
 
         final List<ArtistaResponse> listaArtistaResponse = (
             artistaMapper.toResponseList(listaArtista)
@@ -99,5 +113,15 @@ public class ArtistaController {
         
         artistaService.excluir(idArtista);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("how")
+    public ResponseEntity<ArtistaRequest> how(){
+
+        final ArtistaRequest artistaRequest = new ArtistaRequest();
+        artistaRequest.setNome("nome");
+        artistaRequest.setNascionalidade("nascionalidade");
+
+        return new ResponseEntity<>(artistaRequest, HttpStatus.OK);
     }
 }

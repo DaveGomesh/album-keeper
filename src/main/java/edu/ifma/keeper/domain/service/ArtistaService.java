@@ -14,18 +14,16 @@ import lombok.Builder;
 @Builder
 @Service
 public class ArtistaService {
-    
+
     private final ArtistaRepository artistaRepository;
 
     public Artista salvar(Artista artista) {
         return artistaRepository.save(artista);
     }
 
-    public Artista buscar(Integer idArtista){
-        
-        final Artista artista = (
-            artistaRepository.findById(idArtista).get()
-        );
+    public Artista buscar(Integer idArtista) {
+
+        final Artista artista = (artistaRepository.findById(idArtista).get());
 
         return artista;
     }
@@ -38,21 +36,43 @@ public class ArtistaService {
         return artistaRepository.findAll(paginacao);
     }
 
-    public Artista atualizar(Integer idArtista, Artista artista){
+    public List<Artista> buscarPorNome(String nome) {
 
-        Artista artistaAtual = (
-            artistaRepository.findById(idArtista).get()
+        final List<Artista> listaArtista = (
+            artistaRepository.findByNomeContainsIgnoreCase(nome)
         );
+
+        return listaArtista;
+    }
+
+    public List<Artista> buscarPorNascionalidade(String nascionalidade) {
+
+        final List<Artista> listaArtista = (
+            artistaRepository.findByNascionalidadeContainsIgnoreCase(nascionalidade)
+        );
+
+        return listaArtista;
+    }
+
+    public List<Artista> buscarPorNomeENascionalidade(String nome, String nascionalidade) {
+        final List<Artista> listaArtista = (
+            artistaRepository.findByNomeContainsIgnoreCaseAndNascionalidadeContainsIgnoreCase(nome, nascionalidade)
+        );
+
+        return listaArtista;
+    }
+
+    public Artista atualizar(Integer idArtista, Artista artista) {
+
+        Artista artistaAtual = (artistaRepository.findById(idArtista).get());
 
         BeanUtils.copyProperties(artista, artistaAtual, "idArtista");
-        final Artista artistaAtualizado = (
-            this.salvar(artistaAtual)
-        );
+        final Artista artistaAtualizado = (this.salvar(artistaAtual));
 
         return artistaAtualizado;
     }
 
-    public void excluir(Integer idArtista){
+    public void excluir(Integer idArtista) {
 
         Artista artista = this.buscar(idArtista);
         artistaRepository.delete(artista);
