@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import edu.ifma.keeper.domain.exception.RegraNegocioException;
 import edu.ifma.keeper.domain.model.Album;
 import edu.ifma.keeper.domain.model.Artista;
 import edu.ifma.keeper.domain.model.Musica;
@@ -30,6 +31,8 @@ public class AlbumService {
     }
 
     public Album salvar(Album album, Set<Integer> listaIdParticipante, Set<Integer> listaIdMusica) {
+
+        this.validar(listaIdParticipante, listaIdMusica);
 
         Set<Artista> listaParticipantes = (listaIdParticipante.stream()
             .map(idParticipante -> artistaService.buscar(idParticipante))
@@ -78,5 +81,16 @@ public class AlbumService {
 
         Album album = this.buscar(idAlbum);
         albumRepository.delete(album);
+    }
+
+    private void validar(Set<Integer> listaIdParticipante, Set<Integer> listaIdMusica){
+
+        if(listaIdParticipante.isEmpty()){
+            throw new RegraNegocioException("O Álbum deve ter pelo menos um Participante.");
+        }
+        
+        if(listaIdMusica.isEmpty()){
+            throw new RegraNegocioException("O Álbum deve ter pelo menos uma Música.");
+        }
     }
 }
