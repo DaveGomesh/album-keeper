@@ -79,7 +79,7 @@ public class MusicaService {
         musicaRepository.delete(musica);
     }
 
-    public void validar(Set<Integer> idAutores, Set<Integer> idCantores){
+    private void validar(Set<Integer> idAutores, Set<Integer> idCantores){
         if(idAutores.isEmpty()){
             throw new RegraNegocioException("A Música deve ter pelo menos um Autor.");
         }
