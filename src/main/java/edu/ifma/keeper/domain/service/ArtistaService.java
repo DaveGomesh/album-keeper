@@ -32,10 +32,6 @@ public class ArtistaService {
         return artistaRepository.findAll();
     }
 
-    public Page<Artista> buscar(Pageable paginacao) {
-        return artistaRepository.findAll(paginacao);
-    }
-
     public List<Artista> buscarPorNome(String nome) {
 
         final List<Artista> listaArtista = (
@@ -60,6 +56,27 @@ public class ArtistaService {
         );
 
         return listaArtista;
+    }
+    
+    public Page<Artista> buscar(Pageable paginacao) {
+        return artistaRepository.findAll(paginacao);
+    }
+
+    public Page<Artista> buscarPorNome(String nome, Pageable paginacao) {
+
+        return artistaRepository.findByNomeContainsIgnoreCase(nome, paginacao);
+    }
+
+    public Page<Artista> buscarPorNascionalidade(String nascionalidade, Pageable paginacao) {
+
+        return artistaRepository.findByNascionalidadeContainsIgnoreCase(nascionalidade, paginacao);
+    }
+
+    public Page<Artista> buscarPorNomeENascionalidade(String nome, String nascionalidade, Pageable paginacao) {
+
+        return artistaRepository.findByNomeContainsIgnoreCaseAndNascionalidadeContainsIgnoreCase(
+            nome, nascionalidade, paginacao
+        );
     }
 
     public Artista atualizar(Integer idArtista, Artista artista) {

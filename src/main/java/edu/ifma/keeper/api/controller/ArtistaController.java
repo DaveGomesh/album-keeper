@@ -84,9 +84,23 @@ public class ArtistaController {
     }
 
     @GetMapping("paginacao")
-    public ResponseEntity<Page<ArtistaResponse>> buscar(Pageable paginacao){
+    public ResponseEntity<Page<ArtistaResponse>> buscar(
+        @RequestParam(value = "nome", required = false) String nome, 
+        @RequestParam(value = "nascionalidade", required = false) String nascionalidade,
+        Pageable paginacao){
         
-        Page<Artista> listaArtistaPaginado = artistaService.buscar(paginacao);
+        Page<Artista> listaArtistaPaginado = null;
+
+        if(Objects.isNull(nome) && Objects.isNull(nascionalidade)){
+            listaArtistaPaginado = artistaService.buscar(paginacao);
+        } else if(Objects.nonNull(nome) && Objects.nonNull(nascionalidade)){
+            listaArtistaPaginado = artistaService.buscarPorNomeENascionalidade(nome.trim(), nascionalidade.trim(), paginacao);
+        } else if(Objects.nonNull(nome)){
+            listaArtistaPaginado = artistaService.buscarPorNome(nome.trim(), paginacao);
+        } else {
+            listaArtistaPaginado = artistaService.buscarPorNascionalidade(nascionalidade.trim(), paginacao);
+        }
+    
         final Page<ArtistaResponse> listaArtistaResponsePaginado = (
             listaArtistaPaginado.map(artista -> artistaMapper.toResponse(artista))
         );
