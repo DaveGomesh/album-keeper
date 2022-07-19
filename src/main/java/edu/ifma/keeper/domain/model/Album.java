@@ -49,4 +49,14 @@ public class Album {
     @NotNull @Min(0)
     @Column(name = "ano")
     private Integer ano;
+
+    public Integer getDuracao() {
+
+        Integer duracao = Integer.valueOf(0);
+        for(Musica musica : musicas){
+            duracao += musica.getDuracao();
+        }
+
+        return duracao;
+    }
 }

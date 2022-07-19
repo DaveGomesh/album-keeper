@@ -1,5 +1,6 @@
 package edu.ifma.keeper.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import edu.ifma.keeper.domain.exception.RegraNegocioException;
 import edu.ifma.keeper.domain.model.Album;
 import edu.ifma.keeper.domain.model.Artista;
 import edu.ifma.keeper.domain.model.Musica;
+import edu.ifma.keeper.domain.relatorio.AlbumDetails;
 import edu.ifma.keeper.domain.repository.AlbumRepository;
 import lombok.Builder;
 
@@ -92,5 +94,30 @@ public class AlbumService {
         if(listaIdMusica.isEmpty()){
             throw new RegraNegocioException("O Álbum deve ter pelo menos uma Música.");
         }
+    }
+
+    public List<AlbumDetails> gerarRelatorio(Integer idArtista){
+
+        Artista artista = artistaService.buscar(idArtista);
+        List<Album> listaAlbum = albumRepository.findByParticipantes(artista);
+
+        final List<AlbumDetails> listaAlbumDetails = new ArrayList<>();
+        for(Album album : listaAlbum) {
+
+            AlbumDetails albumDetails = new AlbumDetails();
+            albumDetails.setIdAlbum(album.getIdAlbum());
+            albumDetails.setNome(album.getNome());
+            albumDetails.setAno(album.getAno());
+            albumDetails.setParticipantes(
+                album.getParticipantes().stream().map(
+                    participante -> participante.getNome()
+                ).collect(Collectors.toList())
+            );
+            albumDetails.setDuracaoAlbum(album.getDuracao());
+
+            listaAlbumDetails.add(albumDetails);
+        }
+
+        return listaAlbumDetails;
     }
 }
