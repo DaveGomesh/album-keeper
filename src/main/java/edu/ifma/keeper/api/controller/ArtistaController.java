@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,7 @@ public class ArtistaController {
     private final ArtistaService artistaService;
 
     @PostMapping
+    @CacheEvict(value = "listaArtista", allEntries = true)
     public ResponseEntity<ArtistaResponse> salvar(
         @RequestBody @Valid ArtistaRequest artistaRequest){
 
@@ -60,6 +63,7 @@ public class ArtistaController {
     }
 
     @GetMapping
+    @Cacheable(value = "listaArtista")
     public ResponseEntity<List<ArtistaResponse>> buscar(
         @RequestParam(value = "nome", required = false) String nome, 
         @RequestParam(value = "nascionalidade", required = false) String nascionalidade){
@@ -109,6 +113,7 @@ public class ArtistaController {
     }
     
     @PutMapping("{id-artista}")
+    @CacheEvict(value = "listaArtista", allEntries = true)
     public ResponseEntity<ArtistaResponse> atualizar(
         @PathVariable("id-artista") Integer idArtista, 
         @RequestBody @Valid ArtistaRequest artistaRequest){
@@ -123,6 +128,7 @@ public class ArtistaController {
     }
 
     @DeleteMapping("{id-artista}")
+    @CacheEvict(value = "listaArtista", allEntries = true)
     public ResponseEntity<?> excluir(@PathVariable("id-artista") Integer idArtista) {
         
         artistaService.excluir(idArtista);

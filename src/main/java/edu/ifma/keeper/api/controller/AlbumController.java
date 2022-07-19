@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +36,7 @@ public class AlbumController {
     private final AlbumMapper albumMapper;
 
     @PostMapping
+    @CacheEvict(value = "listaAlbum", allEntries = true)
     public ResponseEntity<AlbumResponse> salvar(
         @RequestBody @Valid AlbumRequest albumRequest){
 
@@ -63,6 +66,7 @@ public class AlbumController {
     }
 
     @GetMapping
+    @Cacheable(value = "listaAlbum")
     public ResponseEntity<List<AlbumResponse>> buscar(){
 
         List<Album> listaAlbum = albumService.buscar();
@@ -74,6 +78,7 @@ public class AlbumController {
     }
 
     @PutMapping("{id-album}")
+    @CacheEvict(value = "listaAlbum", allEntries = true)
     public ResponseEntity<AlbumResponse> atualizar(
         @PathVariable("id-album") Integer idAlbum,
         @RequestBody @Valid AlbumRequest albumRequest){
@@ -91,6 +96,7 @@ public class AlbumController {
     }
 
     @DeleteMapping("{id-album}")
+    @CacheEvict(value = "listaAlbum", allEntries = true)
     public ResponseEntity<?> excluir(@PathVariable("id-album") Integer idAlbum){
         
         albumService.excluir(idAlbum);

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +35,7 @@ public class MusicaController {
     private final MusicaService musicaService;
 
     @PostMapping
+    @CacheEvict(value = "listaMusica", allEntries = true)
     public ResponseEntity<MusicaResponse> salvar(
         @RequestBody @Valid MusicaRequest musicaRequest){
         
@@ -61,6 +64,7 @@ public class MusicaController {
     }
 
     @GetMapping
+    @Cacheable(value = "listaMusica")
     public ResponseEntity<List<MusicaResponse>> buscar(){
         
         List<Musica> listaMusica = musicaService.buscar();
@@ -72,6 +76,7 @@ public class MusicaController {
     }
 
     @PutMapping("{id-musica}")
+    @CacheEvict(value = "listaMusica", allEntries = true)
     public ResponseEntity<MusicaResponse> atualizar(
         @PathVariable("id-musica") Integer idMusica, 
         @RequestBody @Valid MusicaRequest musicaRequest){
@@ -89,6 +94,7 @@ public class MusicaController {
     }
 
     @DeleteMapping("{id-musica}")
+    @CacheEvict(value = "listaMusica", allEntries = true)
     public ResponseEntity<?> excluir(@PathVariable("id-musica") Integer idMusica){
 
         musicaService.excluir(idMusica);
