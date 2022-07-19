@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.ifma.keeper.domain.exception.RegraNegocioException;
 import edu.ifma.keeper.domain.model.Artista;
 import edu.ifma.keeper.domain.model.Musica;
 import edu.ifma.keeper.domain.repository.MusicaRepository;
@@ -26,6 +27,8 @@ public class MusicaService {
     }
 
     public Musica salvar(Musica musica, Set<Integer> idAutores, Set<Integer> idCantores){
+
+        this.validar(idAutores, idCantores);
 
         Set<Artista> autores = (idAutores.stream()
             .map(idAutor -> artistaService.buscar(idAutor))
@@ -74,5 +77,15 @@ public class MusicaService {
         
         Musica musica = this.buscar(idMusica);
         musicaRepository.delete(musica);
+    }
+
+    private void validar(Set<Integer> idAutores, Set<Integer> idCantores){
+        if(idAutores.isEmpty()){
+            throw new RegraNegocioException("A Música deve ter pelo menos um Autor.");
+        }
+        
+        if(idCantores.isEmpty()){
+            throw new RegraNegocioException("A Música deve ter pelo menos um Cantor.");
+        }
     }
 }

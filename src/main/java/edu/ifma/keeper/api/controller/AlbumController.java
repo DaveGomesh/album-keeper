@@ -21,6 +21,7 @@ import edu.ifma.keeper.api.dto.mapper.AlbumMapper;
 import edu.ifma.keeper.api.dto.request.AlbumRequest;
 import edu.ifma.keeper.api.dto.response.AlbumResponse;
 import edu.ifma.keeper.domain.model.Album;
+import edu.ifma.keeper.domain.relatorio.AlbumDetails;
 import edu.ifma.keeper.domain.service.AlbumService;
 import lombok.Builder;
 
@@ -94,6 +95,11 @@ public class AlbumController {
         
         albumService.excluir(idAlbum);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("relatorio-album/{id-artista}")
+    public List<AlbumDetails> testRelatorio(@PathVariable("id-artista") Integer idArtista){
+        return albumService.gerarRelatorio(idArtista);
     }
 
     @GetMapping("how")
